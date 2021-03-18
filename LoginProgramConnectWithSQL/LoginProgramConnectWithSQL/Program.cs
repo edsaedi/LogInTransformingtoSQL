@@ -7,7 +7,7 @@ namespace LoginProgramConnectWithSQL
     {
         static void Main(string[] args)
         {
-            Database.Init();
+            //Database.Init();
 
             Console.WriteLine("Enter in a username");
             string inputedUsername = Console.ReadLine();
@@ -17,7 +17,7 @@ namespace LoginProgramConnectWithSQL
 
             Console.WriteLine(Database.ValidateAccount(inputedUsername, inputedPassword));
             //accounts.Add(new Account(inputedUsername, inputedPassword));
-
+            
             ;
         }
     }

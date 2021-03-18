@@ -8,15 +8,21 @@ namespace LoginProgramConnectWithSQL
     {
         public int ID { get; }
 
+        string firstName;
+        string lastName;
+
         public string Username { get; }
         string password;
 
-        public Account(string username, string password, int id)
+        public Account(int id, string firstName, string lastName, string username, string password)
         {
+            ID = id;
+
+            this.firstName = firstName;
+            this.lastName = lastName;
+
             Username = username;
             this.password = password;
-
-            ID = id;
         }
 
         public void ChangePassword(string newPassword)
@@ -24,5 +30,8 @@ namespace LoginProgramConnectWithSQL
 
         public bool ValidateAccount(string inputedUsername, string inputedPassword)
             => Username == inputedUsername && password == inputedPassword;
+
+        public void WelcomeMessage()
+            => Console.WriteLine($"Thank you for logging in. Welcome {firstName} {lastName}.");
     }
 }
