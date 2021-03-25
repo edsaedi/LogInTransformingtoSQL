@@ -96,12 +96,15 @@ namespace LoginProgramConnectWithSQL
            .ConnectionString;
 
             using var sqlConnection = new SqlConnection(connectionString);
-            using var sqlCommand = new SqlCommand($"SELECT * FROM Accounts WHERE Username = '{username}' AND Password = '{password}'", sqlConnection)
+            using var sqlCommand = new SqlCommand($"usp_LoginAccount", sqlConnection)
             {
-                CommandType = System.Data.CommandType.Text
+                CommandType = System.Data.CommandType.StoredProcedure
             };
             using var sqlDataAdapter = new SqlDataAdapter(sqlCommand);
 
+            sqlCommand.Parameters.AddWithValue("@Username", username);
+            sqlCommand.Parameters.AddWithValue("@Password", password);
+            
             var dataTable = new DataTable();
 
             sqlConnection.Open();
