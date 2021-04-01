@@ -11,25 +11,31 @@ namespace LoginProgramConnectWithSQL
     {
         private static List<Account> accounts;
         private static int count = 1;
-        
 
-        public static void Init()
+
+        private static DataTable CallProc(string storedPorcedure, List<SqlParameter> parameters)
         {
             string connectionString = new SqlConnectionStringBuilder()
             {
                 DataSource = "GMRMLTV",
                 InitialCatalog = "EdanDB",
-                UserID = "sa",
-                Password = "GreatMinds110"
+                UserID = "EdanAppUser",
+                Password = "5?2-4%n!y5Mr/`JG"
             }
-            .ConnectionString;
+           .ConnectionString;
 
             using var sqlConnection = new SqlConnection(connectionString);
-            using var sqlCommand = new SqlCommand("SELECT * FROM Accounts", sqlConnection)
+
+            using var sqlCommand = new SqlCommand($"usp_LoginAccount", sqlConnection)
             {
-                CommandType = System.Data.CommandType.Text
+                CommandType = System.Data.CommandType.StoredProcedure
             };
             using var sqlDataAdapter = new SqlDataAdapter(sqlCommand);
+
+            for (int i = 0; i < parameters.Count; i++)
+            {
+                sqlCommand.Parameters.Insert(i, parameters[i]);
+            }
 
             var dataTable = new DataTable();
 
@@ -37,19 +43,15 @@ namespace LoginProgramConnectWithSQL
             sqlDataAdapter.Fill(dataTable);
             sqlConnection.Close();
 
-            ;
-
-            accounts = new List<Account>()
-            {
-                new Account(1, "Bob", "Smith", "Bob", "1234"),
-                new Account(2, "Fred", "Johns", "Fred", "password"),
-                new Account(3, "Douglas", "Muir", "Douglas", "pass"),
-                new Account(4, "Alex", "Leo", "Alex", "pass22"),
-                new Account(5, "Joe", "White", "Joe", "updown"),
-                new Account(6, "Theo", "Kayak", "Theo", "j35"),
-                new Account(7, "Daniel", "Kim", "Daniel", "2253")
-            };
+            return dataTable;
         }
+
+        public static bool IsValid(string username, string password)
+            => CallProc("usp_LoginUser",
+                        new List<SqlParameter>{
+                        new SqlParameter("@Username", username),
+                        new SqlParameter("@Password", password)})
+               .Rows.Count == 1;
 
         public static void AddUser(string firstName, string lastName, string username, string password)
         {
@@ -69,54 +71,54 @@ namespace LoginProgramConnectWithSQL
             return true;
         }
 
+        
+        //public static bool ValidateAccount(string username, string password)
+        //{
+        //    //var desiredAccount = accounts.FirstOrDefault(account => account.Username == username);
+        //    //if (desiredAccount == null)
+        //    //{
+        //    //    return false;
+        //    //}
 
-        public static bool ValidateAccount(string username, string password)
-        {
-            //var desiredAccount = accounts.FirstOrDefault(account => account.Username == username);
-            //if (desiredAccount == null)
-            //{
-            //    return false;
-            //}
+        //    //if(!desiredAccount.ValidateAccount(username, password))
+        //    //{
+        //    //    return false;
+        //    //}
 
-            //if(!desiredAccount.ValidateAccount(username, password))
-            //{
-            //    return false;
-            //}
+        //    //desiredAccount.WelcomeMessage();
+        //    //return true;
+        //    string connectionString = new SqlConnectionStringBuilder()
+        //    {
+        //        DataSource = "GMRMLTV",
+        //        InitialCatalog = "EdanDB",
+        //        UserID = "EdanAppUser",
+        //        Password = "5?2-4%n!y5Mr/`JG"
+        //    }
+        //   .ConnectionString;
 
-            //desiredAccount.WelcomeMessage();
-            //return true;
+        //    using var sqlConnection = new SqlConnection(connectionString);
 
-            string connectionString = new SqlConnectionStringBuilder()
-            {
-                DataSource = "GMRMLTV",
-                InitialCatalog = "EdanDB",
-                UserID = "sa",
-                Password = "GreatMinds110"
-            }
-           .ConnectionString;
+        //    using var sqlCommand = new SqlCommand($"usp_LoginAccount", sqlConnection)
+        //    {
+        //        CommandType = System.Data.CommandType.StoredProcedure
+        //    };
+        //    using var sqlDataAdapter = new SqlDataAdapter(sqlCommand);
 
-            using var sqlConnection = new SqlConnection(connectionString);
-            using var sqlCommand = new SqlCommand($"usp_LoginAccount", sqlConnection)
-            {
-                CommandType = System.Data.CommandType.StoredProcedure
-            };
-            using var sqlDataAdapter = new SqlDataAdapter(sqlCommand);
+        //    sqlCommand.Parameters.AddWithValue("@Username", username);
+        //    sqlCommand.Parameters.AddWithValue("@Password", password);
 
-            sqlCommand.Parameters.AddWithValue("@Username", username);
-            sqlCommand.Parameters.AddWithValue("@Password", password);
-            
-            var dataTable = new DataTable();
+        //    var dataTable = new DataTable();
 
-            sqlConnection.Open();
-            int rows = sqlDataAdapter.Fill(dataTable);
-            sqlConnection.Close();
+        //    sqlConnection.Open();
+        //    int rows = sqlDataAdapter.Fill(dataTable);
+        //    sqlConnection.Close();
 
-            if(rows == 0)
-            {
-                return false;
-            }
+        //    if (rows == 0)
+        //    {
+        //        return false;
+        //    }
 
-            return true;
-        }
+        //    return true;
+        //}
     }
 }

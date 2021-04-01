@@ -15,7 +15,7 @@ namespace LoginProgramConnectWithSQL
             Console.WriteLine("Enter in a password");
             string inputedPassword = Console.ReadLine();
 
-            Console.WriteLine(Database.ValidateAccount(inputedUsername, inputedPassword));
+            Console.WriteLine(Database.IsValid(inputedUsername, inputedPassword));
             //accounts.Add(new Account(inputedUsername, inputedPassword));
             
             ;
