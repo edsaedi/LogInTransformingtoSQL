@@ -18,6 +18,8 @@ namespace LoginProgramConnectWithSQL
             Console.WriteLine(Database.IsValid(inputedUsername, inputedPassword));
             //accounts.Add(new Account(inputedUsername, inputedPassword));
             
+            Console.Write.Writeline
+
             ;
         }
     }

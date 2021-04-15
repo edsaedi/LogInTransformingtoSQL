@@ -60,18 +60,23 @@ namespace LoginProgramConnectWithSQL
         }
 
         public static bool ChangePassword(int id, string newPassword)
-        {
-            var desiredAccount = accounts.FirstOrDefault(account => account.ID == id);
-            if (desiredAccount == null)
-            {
-                return false;
-            }
+            => int.Parse(CallProc("usp_ChangePassword",
+                        new List<SqlParameter>{
+                        new SqlParameter("@id", id),
+                        new SqlParameter("@newPassword", newPassword)})
+                        .Rows[0]["RowsUpdated"].ToString()) == 1;
 
-            desiredAccount.ChangePassword(newPassword);
-            return true;
-        }
+        //    var desiredAccount = accounts.FirstOrDefault(account => account.ID == id);
+        //    if (desiredAccount == null)
+        //    {
+        //        return false;
+        //    }
 
-        
+        //    desiredAccount.ChangePassword(newPassword);
+        //    return true;
+        //
+
+
         //public static bool ValidateAccount(string username, string password)
         //{
         //    //var desiredAccount = accounts.FirstOrDefault(account => account.Username == username);
