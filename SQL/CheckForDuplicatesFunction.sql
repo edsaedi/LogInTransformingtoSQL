@@ -11,7 +11,7 @@ VALUES (@Username, @Password, @FirstName, @LastName);
 SELECT * FROM Accounts
 
 
---usp_AddUser 'Bobby', 'Tables', 'bobbytables', 'dropdb'
+--usp_AddUser 'Bobby', 'Tables', 'bobbytables4', 'dropdb'
 
 SELECT dbo.fn_IsUsernameUnique() AS IsValid
 

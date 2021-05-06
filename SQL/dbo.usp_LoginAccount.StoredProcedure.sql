@@ -1,6 +1,6 @@
 USE [EdanDB]
 GO
-/****** Object:  StoredProcedure [dbo].[usp_LoginAccount]    Script Date: 4/28/2021 6:26:24 PM ******/
+/****** Object:  StoredProcedure [dbo].[usp_LoginAccount]    Script Date: 5/5/2021 6:20:58 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON

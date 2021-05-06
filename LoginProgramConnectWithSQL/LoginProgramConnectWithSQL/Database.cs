@@ -13,7 +13,7 @@ namespace LoginProgramConnectWithSQL
         private static int count = 1;
 
 
-        private static DataTable CallProc(string storedPorcedure, List<SqlParameter> parameters)
+        private static DataTable CallProc(string storedProcedure, List<SqlParameter> parameters)
         {
             string connectionString = new SqlConnectionStringBuilder()
             {
@@ -26,7 +26,7 @@ namespace LoginProgramConnectWithSQL
 
             using var sqlConnection = new SqlConnection(connectionString);
 
-            using var sqlCommand = new SqlCommand($"usp_LoginAccount", sqlConnection)
+            using var sqlCommand = new SqlCommand(storedProcedure, sqlConnection)
             {
                 CommandType = System.Data.CommandType.StoredProcedure
             };
@@ -53,10 +53,22 @@ namespace LoginProgramConnectWithSQL
                         new SqlParameter("@Password", password)})
                .Rows.Count == 1;
 
-        public static void AddUser(string firstName, string lastName, string username, string password)
+        public static bool AddUser(string firstName, string lastName, string username, string password)
         {
-            accounts.Add(new Account(count, firstName, lastName, username, password));
-            count++;
+            try
+            {
+                var procedureResult = CallProc("usp_AddUser", new List<SqlParameter>{
+                new SqlParameter("@FirstName", firstName),
+                new SqlParameter("@LastName", lastName),
+                new SqlParameter("@Username", username),
+                new SqlParameter("@Password", password)});
+
+                return procedureResult.Rows.Count == 1;
+            }
+            catch(SqlException)
+            {   
+                return false;
+            }
         }
 
         public static bool ChangePassword(int id, string newPassword)
